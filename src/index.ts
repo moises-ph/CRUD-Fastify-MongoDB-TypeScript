@@ -1,35 +1,32 @@
-import fastify from 'fastify'
+import Fastify from "fastify";
+import { TypeBoxTypeProvider } from "@fastify/type-provider-typebox";
+import { AuthUser, AuthUserType } from "./models/AuthUser.schema";
 
-const server = fastify()
+const server = Fastify().withTypeProvider<TypeBoxTypeProvider>();
 
+server.get("/ping", async (request, reply) => {
+  return "pong\n";
+});
 
-interface IQuerystring {
-  username: string;
-  password: string;
-}
+server.post<{ Body : AuthUserType }>(
+  "/auth",
+  {
+    schema : {
+      body : AuthUser
+    }
+  },
+  async (request, reply) => {
+    const { username, password } = request.body;
 
-interface IHeaders {
-  "h-Custom": string;
-}
-
-
-server.get('/ping', async (request, reply) => {
-  return 'pong\n'
-})
-
-server.get<{QueryString : IQuerystring, Headers : IHeaders}>('/auth', async (request, reply) => {
-  const { username, password } = request.query;
-  const customerHeader = request.headers["h-Custom"];
-
-  console.log(username + " " + password);
-  console.log(customerHeader);
-  return "logged in";
-})
+    console.log(username + " " + password);
+    return "logged in";
+  }
+);
 
 server.listen({ port: 8080 }, (err, address) => {
   if (err) {
-    console.error(err)
-    process.exit(1)
+    console.error(err);
+    process.exit(1);
   }
-  console.log(`Server listening at ${address}`)
-})
+  console.log(`Server listening at ${address}`);
+});
