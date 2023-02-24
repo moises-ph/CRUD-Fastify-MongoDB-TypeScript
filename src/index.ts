@@ -2,7 +2,7 @@ import Fastify from "fastify";
 import { TypeBoxTypeProvider } from "@fastify/type-provider-typebox";
 import { AuthUser, AuthUserType } from "./models/AuthUser.schema";
 
-const server = Fastify().withTypeProvider<TypeBoxTypeProvider>();
+const server = Fastify({logger : true}).withTypeProvider<TypeBoxTypeProvider>();
 
 server.get("/ping", async (request, reply) => {
   return "pong\n";
