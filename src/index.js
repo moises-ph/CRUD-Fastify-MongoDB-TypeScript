@@ -5,11 +5,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const fastify_1 = __importDefault(require("fastify"));
 const AuthUser_schema_1 = require("./models/AuthUser.schema");
-const server = (0, fastify_1.default)().withTypeProvider();
+const server = (0, fastify_1.default)({ logger: true }).withTypeProvider();
 server.get("/ping", async (request, reply) => {
     return "pong\n";
 });
-server.post("/auth", {
+server.post("/testAuth", {
     schema: {
         body: AuthUser_schema_1.AuthUser
     }
@@ -23,5 +23,4 @@ server.listen({ port: 8080 }, (err, address) => {
         console.error(err);
         process.exit(1);
     }
-    console.log(`Server listening at ${address}`);
 });
