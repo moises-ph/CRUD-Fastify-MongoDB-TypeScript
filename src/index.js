@@ -4,19 +4,29 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const fastify_1 = __importDefault(require("fastify"));
-const AuthUser_schema_1 = require("./models/AuthUser.schema");
-const server = (0, fastify_1.default)({ logger: true }).withTypeProvider();
+require("./utils/mongoose");
+const product_routes_1 = require("./routes/product.routes");
+const server = (0, fastify_1.default)({
+    logger: true,
+}).withTypeProvider();
 server.get("/ping", async (request, reply) => {
     return "pong\n";
 });
-server.post("/testAuth", {
-    schema: {
-        body: AuthUser_schema_1.AuthUser
+product_routes_1.routes.map((route, index) => {
+    switch (route.method) {
+        case 'GET':
+            index == 0 ? server.get(route.url, route.handler) : server.get(route.url, { schema: route.schema }, route.handler);
+            break;
+        case 'POST':
+            server.post(route.url, { schema: route.schema }, route.handler);
+            break;
+        case 'PUT':
+            server.put(route.url, { schema: route.schema }, route.handler);
+            break;
+        case 'DELETE':
+            server.delete(route.url, { schema: route.schema }, route.handler);
+            break;
     }
-}, async (request, reply) => {
-    const { username, password } = request.body;
-    console.log(username + " " + password);
-    return "logged in";
 });
 server.listen({ port: 8080 }, (err, address) => {
     if (err) {

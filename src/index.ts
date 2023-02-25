@@ -1,29 +1,33 @@
 import Fastify from "fastify";
 import { TypeBoxTypeProvider } from "@fastify/type-provider-typebox";
-// import { AuthUser, AuthUserType } from "./models/AuthUser.schema";
+import "./utils/mongoose"; 
+import { routes } from "./routes/product.routes";
+import { ProducType, IQueryStringType  } from "./validations/product.validation";
 
 const server = Fastify({
   logger: true,
 }).withTypeProvider<TypeBoxTypeProvider>();
 
-// server.get("/ping", async (request, reply) => {
-//   return "pong\n";
-// });
+server.get("/ping", async (request, reply) => {
+  return "pong\n";
+});
 
-// server.post<{ Body: AuthUserType }>(
-//   "/testAuth",
-//   {
-//     schema: {
-//       body: AuthUser,
-//     },
-//   },
-//   async (request, reply) => {
-//     const { username, password } = request.body;
-
-//     console.log(username + " " + password);
-//     return "logged in";
-//   }
-// );
+routes.map((route, index) => {
+  switch (route.method){
+    case 'GET':
+      index == 0 ? server.get(route.url ,route.handler) : server.get<{ Querystring : IQueryStringType}>(route.url, { schema : route.schema}, route.handler);
+      break;
+    case 'POST':
+      server.post<{ Body : ProducType }>(route.url, { schema : route.schema }, route.handler);
+      break;
+    case 'PUT':
+      server.put<{ Body : ProducType, Querystring : IQueryStringType }>(route.url, { schema : route.schema } , route.handler);
+      break;
+    case 'DELETE':
+      server.delete<{ Querystring : IQueryStringType }>(route.url, { schema : route.schema }, route.handler);
+      break;
+  }
+});
 
 server.listen({ port: 8080 }, (err, address) => {
   if (err) {
