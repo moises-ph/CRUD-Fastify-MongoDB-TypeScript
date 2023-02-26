@@ -1,4 +1,5 @@
-import { Static, Type } from '@sinclair/typebox'
+import { Static, Type } from '@sinclair/typebox';
+import { Types } from 'mongoose';
 
 // interface Product {
 //   title: string;

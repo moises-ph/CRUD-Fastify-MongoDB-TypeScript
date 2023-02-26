@@ -18,7 +18,7 @@ export const routes = [
     method: "GET",
     handler: getSingleProduct,
     schema: {
-      querystring: IQueryString,
+      params: IQueryString,
     },
   },
   {
@@ -35,7 +35,7 @@ export const routes = [
     handler: updateProduct,
     schema: {
       body: ProductSchema,
-      querystring : IQueryString
+      params : IQueryString
     },
   },
   {
@@ -43,7 +43,7 @@ export const routes = [
     method: "DELETE",
     handler: deleteProduct,
     schema: {
-      querystring: IQueryString,
+      params: IQueryString,
     },
   },
 ];

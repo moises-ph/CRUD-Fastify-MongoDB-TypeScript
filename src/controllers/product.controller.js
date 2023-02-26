@@ -27,7 +27,7 @@ exports.createProduct = createProduct;
 const updateProduct = async (req, reply) => {
     try {
         const updatedProduct = await product_model_1.Product.findByIdAndUpdate(req.params.id, req.body);
-        return reply.send(exports.updateProduct);
+        return updatedProduct == null ? reply.code(404).send({ error: "Product doesn't exists" }) : reply.send({ ProductDeletedId: updatedProduct["_id"], ok: "Product updated succesfully" });
     }
     catch (err) {
         return reply.code(500).send(err);
@@ -38,7 +38,7 @@ exports.updateProduct = updateProduct;
 const deleteProduct = async (req, reply) => {
     try {
         const deletedProduct = await product_model_1.Product.findByIdAndDelete(req.params.id);
-        return reply.send(deletedProduct);
+        return deletedProduct == null ? reply.code(404).send({ error: "Product doesn't exists" }) : reply.send({ ProductDeletedId: deletedProduct["_id"], ok: "Product deleted succesfully" });
     }
     catch (err) {
         return reply.code(500).send(err);

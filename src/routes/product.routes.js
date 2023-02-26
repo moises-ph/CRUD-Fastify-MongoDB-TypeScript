@@ -14,7 +14,7 @@ exports.routes = [
         method: "GET",
         handler: product_controller_1.getSingleProduct,
         schema: {
-            querystring: product_validation_1.IQueryString,
+            params: product_validation_1.IQueryString,
         },
     },
     {
@@ -31,7 +31,7 @@ exports.routes = [
         handler: product_controller_1.updateProduct,
         schema: {
             body: product_validation_1.ProductSchema,
-            querystring: product_validation_1.IQueryString
+            params: product_validation_1.IQueryString
         },
     },
     {
@@ -39,7 +39,7 @@ exports.routes = [
         method: "DELETE",
         handler: product_controller_1.deleteProduct,
         schema: {
-            querystring: product_validation_1.IQueryString,
+            params: product_validation_1.IQueryString,
         },
     },
 ];

@@ -15,16 +15,16 @@ server.get("/ping", async (request, reply) => {
 routes.map((route, index) => {
   switch (route.method){
     case 'GET':
-      index == 0 ? server.get(route.url ,route.handler) : server.get<{ Querystring : IQueryStringType}>(route.url, { schema : route.schema}, route.handler);
+      index == 0 ? server.get(route.url ,route.handler) : server.get<{ Params : IQueryStringType}>(route.url, { schema : route.schema}, route.handler);
       break;
     case 'POST':
       server.post<{ Body : ProducType }>(route.url, { schema : route.schema }, route.handler);
       break;
     case 'PUT':
-      server.put<{ Body : ProducType, Querystring : IQueryStringType }>(route.url, { schema : route.schema } , route.handler);
+      server.put<{ Params : IQueryStringType , Body : ProducType }>(route.url, { schema : route.schema } , route.handler);
       break;
     case 'DELETE':
-      server.delete<{ Querystring : IQueryStringType }>(route.url, { schema : route.schema }, route.handler);
+      server.delete<{ Params : IQueryStringType }>(route.url, { schema : route.schema }, route.handler);
       break;
   }
 });
