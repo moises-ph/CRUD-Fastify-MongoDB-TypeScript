@@ -26,7 +26,7 @@ export const updateProduct = async (req, reply) => {
     try{
         const updatedProduct = await Product.findByIdAndUpdate(req.params.id, req.body);
         
-        return updatedProduct == null ? reply.code(404).send({error : "Product doesn't exists"}) : reply.send({ ProductDeletedId : updatedProduct["_id"], ok : "Product updated succesfully" });
+        return updatedProduct == null ? reply.code(404).send({error : "Product doesn't exists"}) : reply.send({ ProductUpdatedId : updatedProduct["_id"], ok : "Product updated succesfully" });
     }
     catch(err){
         return reply.code(500).send(err);

@@ -1,3 +1,4 @@
+import fastify, { FastifyInstance } from "fastify";
 import {
   getSingleProduct,
   getProducts,
@@ -5,45 +6,80 @@ import {
   updateProduct,
   deleteProduct,
 } from "../controllers/product.controller";
-import { ProductSchema, IQueryString } from "../validations/product.validation";
+import {
+  ProductSchema,
+  IQueryString,
+  IQueryStringType,
+  ProducType,
+} from "../validations/product.validation";
 
-export const routes = [
-  {
-    url: "/products",
-    method: "GET",
+const routes = {
+  getAllProducts: {
+    /* url: "/products", */
     handler: getProducts,
   },
-  {
-    url: "/products/:id",
-    method: "GET",
+  getSingleProduct: {
+    /* url: "/products/:id", */
     handler: getSingleProduct,
     schema: {
       params: IQueryString,
     },
   },
-  {
-    url: "/products",
-    method: "POST",
+  postProduct: {
+    /* url: "/products", */
     handler: createProduct,
     schema: {
       body: ProductSchema,
     },
   },
-  {
-    url: "/products/:id",
-    method: "PUT",
+  updateProduct: {
+    /* url: "/products/:id", */
     handler: updateProduct,
     schema: {
       body: ProductSchema,
-      params : IQueryString
+      params: IQueryString,
     },
   },
-  {
-    url: "/products/:id",
-    method: "DELETE",
+  deleteProduct: {
+    /* url: "/products/:id", */
     handler: deleteProduct,
     schema: {
       params: IQueryString,
     },
   },
-];
+};
+
+export const productRoutes = (
+  fastify: FastifyInstance,
+  options: any,
+  done: any
+) => {
+  // Get All products
+  fastify.get(options.url, routes.getAllProducts);
+
+  // Get a single product
+  fastify.get<{ Params: IQueryStringType }>(
+    `${options.url}/:id`,
+    routes.getSingleProduct
+  );
+
+  // Create a product
+  fastify.post<{ Body: ProducType }>(
+    options.url,
+    routes.postProduct
+  );
+
+  // Update a product
+  fastify.put<{ Params: IQueryStringType; Body: ProducType }>(
+    `${options.url}/:id`,
+    routes.updateProduct
+  );
+
+  // Delete a product
+  fastify.delete<{ Params: IQueryStringType }>(
+    `${options.url}/:id`,
+    routes.deleteProduct
+  );
+
+  done();
+};

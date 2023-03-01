@@ -9,25 +9,13 @@ const product_routes_1 = require("./routes/product.routes");
 const server = (0, fastify_1.default)({
     logger: true,
 }).withTypeProvider();
+// Route for test the server
 server.get("/ping", async (request, reply) => {
     return "pong\n";
 });
-product_routes_1.routes.map((route, index) => {
-    switch (route.method) {
-        case 'GET':
-            index == 0 ? server.get(route.url, route.handler) : server.get(route.url, { schema: route.schema }, route.handler);
-            break;
-        case 'POST':
-            server.post(route.url, { schema: route.schema }, route.handler);
-            break;
-        case 'PUT':
-            server.put(route.url, { schema: route.schema }, route.handler);
-            break;
-        case 'DELETE':
-            server.delete(route.url, { schema: route.schema }, route.handler);
-            break;
-    }
-});
+// Set up the routes
+server.register(product_routes_1.productRoutes, { url: '/api/products' });
+// Start up the server
 server.listen({ port: 8080 }, (err, address) => {
     if (err) {
         console.error(err);
